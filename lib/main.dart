@@ -4,6 +4,7 @@ import 'package:firebaseseries_course/Screens/home_scrren.dart';
 import 'package:flutter/material.dart';
 
 import 'Screens/email_auth/login_screen.dart';
+import 'Screens/phone_auth/sign_in_with_phone.dart';
 import 'firebase_options.dart';
 
 void main()async {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home:(FirebaseAuth.instance.currentUser != null)?HomeScreen():
-      LoginScreen()
+      SignInWithPhone()
     );
   }
 }

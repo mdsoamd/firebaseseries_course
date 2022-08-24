@@ -4,6 +4,8 @@ import 'package:firebaseseries_course/Screens/email_auth/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'phone_auth/sign_in_with_phone.dart';
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Navigator.popUntil(context, (route) => route.isFirst);
   Navigator.pushReplacement(context, CupertinoPageRoute(
-            builder: (context) => LoginScreen()
+            builder: (context) => SignInWithPhone() 
           ));
   }
   
