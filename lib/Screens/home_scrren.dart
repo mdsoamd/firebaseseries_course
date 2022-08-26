@@ -45,13 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void saveUser()async {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
-    String Age = ageController.text.trim();
+    String AgeString = ageController.text.trim();
+     
+    int age = int.parse(AgeString);
 
     nameController.clear();
     emailController.clear();
     ageController.clear();
 
-    if (name != "" && email != "" && Age != "" && porfilepic != "") {
+    if (name != "" && email != "" && age != "" && porfilepic != "") {
 
        UploadTask uploadTask = FirebaseStorage.instance.ref().child("porfilepictures").child(Uuid().v1()).putFile(porfilepic!);      // <-- Yah hai image upload karna ka code
 
@@ -72,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Map<String, dynamic> userData = {       // <-- yah Map Main data de sakte hai jo data add karenge
         'name': name,
          'email': email,
-         'age':Age,
+         'age':age,
          "porfilepic":downloadurl
          };
 
@@ -88,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
       log("User add");
     } else {
 
-       Fluttertoast.showToast(msg:"please fill the fields",     // <-- yah code user ko message show  karwata hai
+      Fluttertoast.showToast(msg:"please fill the fields",     // <-- yah code user ko message show  karwata hai
       textColor: Colors.red,
       backgroundColor: Colors.grey,
       fontSize: 16.0
@@ -204,10 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               return ListTile(
                                 leading: CircleAvatar(backgroundImage: NetworkImage(userMap["porfilepic"]),),
-                                title: Row(children: [
-                                  Text(userMap["name"]),
-                                  Text(userMap["age"])
-                                ],),
+                                title:  Text(userMap["name"]+"(${userMap["age"]})"),
                                 subtitle: Text(userMap["email"]),
                                 onTap: (() {}),
                               );
