@@ -20,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -35,14 +36,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void saveUser() {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
-
+    String ageString = ageController.text.trim();
+    
+    int age = int.parse(ageString);
+    
     nameController.clear();
     emailController.clear();
+    ageController.clear();
 
-    if (name != "" && email != "") {
-      Map<String, dynamic> userData = {'name': name, 'email': email};
+    if (name != "" && email != ""&& age != "") {
+      Map<String, dynamic> userData = {
+        'name': name, 
+        'email':email,
+        'age':age
+        };
 
-      _firestore.collection("users").add(userData);
+      _firestore.collection("newusers").add(userData);
       log("User add");
     } else {
       log("please fill the fields");
@@ -82,16 +91,27 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 10,
             ),
+            TextField(
+              controller: ageController,
+              decoration: InputDecoration(labelText: "Age"),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             ElevatedButton(
                 onPressed: () {
                   saveUser();
+                  
                 },
                 child: Text("Save")),
             SizedBox(
               height: 20,
             ),
+
             StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection("users").snapshots(),
+                stream: _firestore.collection("newusers").
+                where("age",isGreaterThanOrEqualTo: 20).orderBy("age",descending: false).
+                snapshots(),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
                     if (snapshot.hasData && snapshot.data != null) {
@@ -104,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       as Map<String, dynamic>;
 
                               return ListTile(
-                                title: Text(userMap["name"]),
+                                title: Text(userMap["name"] + "(${userMap["age"]})"),
                                 subtitle: Text(userMap["email"]),
                                 onTap: (() {}),
                               );
@@ -118,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
 
-                  return Text("Error");
+                  return SizedBox();
                 }))
           ],
         ),
