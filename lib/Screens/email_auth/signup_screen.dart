@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({ Key? key }) : super(key: key);
@@ -32,9 +33,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
         if(userCredential.user != null) {
-          Navigator.pop(context);
+          
+        Fluttertoast.showToast(msg:"Successful",
+        textColor: Colors.blue,
+         backgroundColor: Colors.grey,
+        fontSize: 16.0
+        );
+
+        Navigator.pop(context);
         }
+
       } on FirebaseAuthException catch(ex) {
+        
+      Fluttertoast.showToast(msg:ex.code.toString(),
+      textColor: Colors.red,
+      backgroundColor: Colors.grey,
+      fontSize: 16.0
+      );
+
         log(ex.code.toString());
       }
     }
